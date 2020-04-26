@@ -1,0 +1,9 @@
+# Build settings
+baseurl:  # Change this to your relative path (ex: /blog/), or leave just a /
+markdown: kramdown
+source: .
+destination: ./_site
+permalink: /:title
+
+# Google Analytics
+google_analytics: UA-142979168-1
