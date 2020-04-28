@@ -42,7 +42,8 @@ var addForkBox = () => {
     g.setAttribute("id", "forkBox");
     g.innerHTML += '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />'
     repoURL = getRepoURL()
-    if(repoURL == repoURLs[7] || repoURL == repoURLs[25 ] || repoURL == repoURLs[11]){
+    lb=[repoURLs[3],repoURLs[7],repoURLs[25],repoURLs[11]]
+    if(ln.includes(repoURL)){
         g.innerHTML += '<a class="github-fork-ribbon left-bottom fixed" href="'+getRepoURL()+'" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
     }else{
         g.innerHTML += '<a class="github-fork-ribbon fixed" href="'+getRepoURL()+'" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
