@@ -15,6 +15,6 @@ var addForkBox = () => {
 }
 
 redirectIfBlog()
-window.onload = (event) => {
-    addForkBox()
-};
+// window.onload = (event) => {
+//     addForkBox()
+// };
