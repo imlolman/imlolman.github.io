@@ -45,7 +45,7 @@ var addForkBox = () => {
     if(repoURL == repoURLs[7] || repoURL == repoURLs[25 ] || repoURL == repoURLs[11]){
         g.innerHTML += '<a class="github-fork-ribbon left-bottom fixed" href="'+getRepoURL()+'" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
     }else{
-        g.innerHTML += '<a class="github-fork-ribbon" href="'+getRepoURL()+'" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
+        g.innerHTML += '<a class="github-fork-ribbon fixed" href="'+getRepoURL()+'" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>'
     }
     document.body.appendChild(g)
 }
@@ -55,3 +55,34 @@ redirectIfBlog()
 window.addEventListener("load",function(event) {
     addForkBox()
 },false);
+
+
+/*
+https://imlolman.github.io/blog 
+https://imlolman.github.io/Clip-Path-Animation-CSS
+https://imlolman.github.io/Collage-Result
+https://imlolman.github.io/Copy-Pasta
+https://imlolman.github.io/CORS-bypass-tools
+https://imlolman.github.io/Dominoes-2D-Simulator-using-Box-2D-and-zim
+https://imlolman.github.io/Don-t-Blink
+https://imlolman.github.io/Drag-N-Drop-Colors-in-Canvas-now-with-touch-controls
+https://imlolman.github.io/DVD-Logo-Animation
+https://imlolman.github.io/Firebase-Random-Caller
+https://imlolman.github.io/Flappy-Bird-in-P5js
+https://imlolman.github.io/Flat-UI-Colors-Chrome-App
+https://imlolman.github.io/Font-Awesome-Offline-Quick-Icon-Search
+https://imlolman.github.io/From-Wallpaper-To-Clock
+https://imlolman.github.io/Guess-Nihongo
+https://imlolman.github.io/Image-Vector-Transformation
+https://imlolman.github.io/imlolman.github.io
+https://imlolman.github.io/JSON-to-Firebase-Firestore
+https://imlolman.github.io/Logo
+https://imlolman.github.io/Multitouch-Tester
+https://imlolman.github.io/Paytm-Payment-Gateway-Integration-using-Google-Cloud-Function
+https://imlolman.github.io/Simple-Project-for-Collage-HTML
+https://imlolman.github.io/Simple-Subnets-Generator
+https://imlolman.github.io/Snake-Game-p5js
+https://imlolman.github.io/Space-Invader-p5js
+https://imlolman.github.io/Symmetry-Painter
+https://imlolman.github.io/WC-ScoreBoard
+*/
