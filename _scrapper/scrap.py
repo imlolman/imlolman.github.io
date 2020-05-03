@@ -12,7 +12,7 @@ def resize(filename, width):
     w, h = image.size
     image = image.resize((width, int((width/w)*h)), Image.ANTIALIAS)
     quality_val = 90
-    image.save('output/images/'+filename+'.png', 'PNG', quality=quality_val)
+    image.save('projects/images/'+filename+'.png', 'PNG', quality=quality_val)
 
 
 def download(url, filename):
@@ -32,13 +32,13 @@ def setupFolders():
         shutil.rmtree('temp')
     os.mkdir('temp')
 
-    if(os.access('output', os.R_OK)):
-        shutil.rmtree('output')
-    os.mkdir('output')
+    if(os.access('projects', os.R_OK)):
+        shutil.rmtree('projects')
+    os.mkdir('projects')
 
-    if(os.access('output/images', os.R_OK)):
-        shutil.rmtree('output/images')
-    os.mkdir('output/images')
+    if(os.access('projects/images', os.R_OK)):
+        shutil.rmtree('projects/images')
+    os.mkdir('projects/images')
 
 
 def downloadNresize():
@@ -52,7 +52,7 @@ def downloadNresize():
 
     print("Downloading and Resizing Image")
 
-    open('output/repos.json', 'w+',
+    open('projects/repos.json', 'w+',
          encoding="utf-8").write(json.dumps(reposToPublish))
 
     for repo in reposToPublish:
@@ -119,7 +119,7 @@ def writeSitemap():
             urls.append({"url": "https://imlolman.github.io/" +
                          repo['name'], "priority": 0.6})
 
-    open('output/sitemap.xml', 'w+').write(generateSitemap(urls))
+    open('sitemap.xml', 'w+').write(generateSitemap(urls))
     print('Sitemap Written')
 
 
