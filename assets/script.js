@@ -11,11 +11,12 @@ function loadProjects(x = 0) {
     projects = []
     data.forEach(repo => {
       if (repo.has_pages) {
+        //this.setAttribute('src','http://corsbypass.000webhostapp.com/og-image.php?url=` + repo.html_url + `&resolution=500x300&quality=10&crop=false')
         template = `
                 <div class="col-md-4 mb-2">
                 <div class="card" style="width: 100%;height: 100%">
-                  <div class="card-img"><img src="` + `/projects/images/` + repo.name + `.png" onerror="this.setAttribute('src','http://corsbypass.000webhostapp.com/og-image.php?url=` + repo.html_url + `&resolution=500x300&quality=10&crop=false')" class="card-img-top"
-                      onerror="this.style.display='none'" alt="⌛ Loading ` + repo.name.replace(/-/g, ' ') + ` Thumbnail.">
+                  <div class="card-img"><img src="` + `/projects/images/` + repo.name + `.png" onerror="" class="card-img-top"
+                    alt="⌛ Loading ` + repo.name.replace(/-/g, ' ') + ` Thumbnail.">
                     <div class="updated"><i class="fa fa-clock-o" aria-hidden="true"></i> Created ` + moment(repo.created_at).fromNow() + `. </div>
                     <div class="open-source-code"><a href="` + repo.html_url + `" target="_blank">
                     Source Code <i class="fa fa-book" aria-hidden="true"></i> </a></div>
