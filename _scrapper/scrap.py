@@ -21,10 +21,13 @@ def download(url, filename):
 
 
 def saveRepo():
+    if(os.access('temp', os.R_OK)):
+        shutil.rmtree('temp')
+    os.mkdir('temp')
     print('Saving Repo')
     response = requests.get('https://api.github.com/users/imlolman/repos?page=1&per_page=100')
     response.encoding = 'utf-8'
-    open('temp/repos.json', encoding="utf-8", mode='w+').write(response.text)
+    open('temp/repos.json', 'w',encoding="utf-8").write(response.text)
 
 
 def setupFolders():
@@ -56,16 +59,17 @@ def downloadNresize():
          encoding="utf-8").write(json.dumps(reposToPublish))
 
     for repo in reposToPublish:
-        response = requests.get(repo['html_url'])
-        response.encoding = 'utf-8'
+        if not os.path.isfile("projects/images/"+repo['name']+".png"):
+            response = requests.get(repo['html_url'])
+            response.encoding = 'utf-8'
 
-        data = response.text
+            data = response.text
 
-        match = re.search('<meta property="og:image" content="(.*?)" />', data)
+            match = re.search('<meta property="og:image" content="(.*?)" />', data)
 
-        if match:
-            download(match.group(1), repo['name'])
-            resize(repo['name'], 500)
+            if match:
+                download(match.group(1), repo['name'])
+                resize(repo['name'], 500)
 
     print(str(len(reposToPublish))+' repos Done, You are good to go.')
 
@@ -128,7 +132,7 @@ def removeTempFile():
         shutil.rmtree('temp')
 
 
-setupFolders()
+# setupFolders()
 saveRepo()
 writeSitemap()
 downloadNresize()
