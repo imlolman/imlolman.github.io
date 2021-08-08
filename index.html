@@ -134,94 +134,25 @@
       </div>
     </div>
 
-    <div class="home-casestudies">
-      <span class="outline-title">Case Studies &amp;&nbsp;Projects</span>
-      <section class="project project-1">
-        <div class="intro-casestudies">
-          <span class="intro-title">
-            GyanBuzz Platform
-            <div class="badge">
-              <div class="text-default">Staff<br />Pick</div>
-              <div class="text-hover"> Of Course There Is No Staff</div>
-            </div>
-          </span>
+    <div class="content-about">
+      <div class="about-exploration">
+        <div class="exploration-text">
+          <div class="outline-title">
+            Personal Projects
+          </div>
         </div>
-        <a href="casestudies/gyanbuzz.html">
-          <div class="project-img">
-            <img alt="thumb project" src="img/thumb-gyanbuzz.png">
-          </div>
-          <div class="project-desc">
-            <span class="project-number">01</span>
-            <span class="project-arrow"></span>
-            <span class="project-hover">
-              <span class="project-client">GyanBuzz</span>
-              <span class="project-view">View project</span>
-            </span>
-            <h3>Building an Elearning platform</h3>
-            <p>I collaborated with GyanBuzz to build their eLearning app based platform from scratch. This
-              case study explains what the process was, from the designing part to the development part.
-            </p>
-          </div>
-        </a>
-      </section>
-
-      <section class="project project-2">
-        <a href="casestudies/larapush.html">
-          <div class="project-img">
-            <img alt="thumb project" src="img/thumb-larapush.jpg">
-          </div>
-          <div class="project-desc">
-            <span class="project-number">02</span>
-            <span class="project-arrow"></span>
-            <span class="project-hover">
-              <span class="project-client">Larapush</span>
-              <span class="project-view">View project</span>
-            </span>
-            <h3>Rebuilding SAAS</h3>
-            <p>I joined Larapush to rebuild their webpush saas. I have changed backend algorithm to scale
-              and configured automated deployments.</p>
-          </div>
-        </a>
-      </section>
-
-      <section class="project project-3">
-        <a href="casestudies/zippyfeed.html">
-          <div class="project-img">
-            <img alt="thumb project colllect" src="img/thumb-zippyfeed.png">
-          </div>
-          <div class="project-desc">
-            <span class="project-number">03</span>
-            <span class="project-arrow"></span>
-            <span class="project-hover">
-              <span class="project-client">ZippyFeed</span>
-              <span class="project-view">View project</span>
-            </span>
-            <h3>Online Food Delivery Platform.</h3>
-            <p>I joined team ZippyFeed to develop their backend and admin panel. It helped the company to
-              revolutionized the way company was offering service.</p>
-          </div>
-        </a>
-      </section>
-
-      <section class="project project-4">
-        <a href="casestudies/ataxiaindia.html">
-          <div class="project-img">
-            <img alt="thumb project ankama launcher" src="img/thumb-ataxiaindia.png">
-          </div>
-          <div class="project-desc">
-            <span class="project-number">04</span>
-            <span class="project-arrow"></span>
-            <span class="project-hover">
-              <span class="project-client">Ataxia India</span>
-              <span class="project-view">View project</span>
-            </span>
-            <h3>Development of Ataxia India</h3>
-            <p>In the journey of development, this was one of my oldest client project. This includes a full
-              CMS and a website to showcase their work and collect volenteers, doctors and donations
-              across india.</p>
-          </div>
-        </a>
-      </section>
+        <div class="exploration-grid" id="projects">
+          
+        </div>
+        <div class="exploration-view-more">
+          <a>
+            <h3 style="margin: 0">
+              <span class="arrow" onclick="loadMore(this.parentElement.parentElement.parentElement)">Load More Projects
+                (<span id="remainingProjectsCount"></span>)</span>
+            </h3>
+          </a>
+        </div>
+      </div>
     </div>
 
 
@@ -348,5 +279,9 @@
 </body>
 <script src="/js/smooth-scroll.polyfills.min.js"></script>
 <script src="/js/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="/js/script.js"></script>
+<script>
+  loadProjects(6)
+</script>
 </html>

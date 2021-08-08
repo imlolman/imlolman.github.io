@@ -101,10 +101,12 @@ function loadProjects(x = 0) {
       if (repo.has_pages) {
         template = `
         <a href="https://imlolman.github.io/${repo.name}" target="_blank">
-          <img src="/projects/images/${repo.name}.png" alt="chrome extension">
+          <div class="header">
+            <img src="/projects/images/${repo.name}.png" alt="chrome extension">
+            <p class="description">${repo.description}</p>
+          </div>
           <p class="tag">Created ${moment(repo.created_at).fromNow()}</p>
           <p class="figure">${repo.name.replace(/-/g, ' ')}</p>
-          <p class="description">${repo.description}</p>
         </a>
               `
         // template = `
