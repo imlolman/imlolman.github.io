@@ -694,7 +694,7 @@ p {
 }
 .content-about .about-intro {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   box-sizing: border-box;
   padding-left: 140px;
   margin-top: 40px;
@@ -715,7 +715,7 @@ p {
 }
 .content-about .about-services {
   display: flex;
-  margin-top: -6%;
+  margin-top: -10px;
   animation: anim-text 1250ms cubic-bezier(0, 0.45, 0.15, 1);
 }
 .content-about .about-services .content-services {
@@ -723,6 +723,7 @@ p {
   box-sizing: border-box;
   padding: 100px 140px;
   width: 65%;
+  z-index: 50;
 }
 .content-about .about-services .content-services p {
   color: #52436c;
@@ -753,7 +754,7 @@ p {
   margin-top: 30px;
 }
 .content-about .about-services .resume {
-  margin: 220px 0 0 60px;
+  margin: 220px 60px 0 0;
   width: 23%;
   animation: anim-text 1250ms cubic-bezier(0, 0.45, 0.15, 1);
 }
@@ -977,7 +978,7 @@ p {
     padding-left: 0px;
   }
   .content-about .about-intro {
-    flex-direction: column-reverse;
+    flex-direction: column;
     padding-left: 0px;
   }
   .content-about .about-intro .about-text {
@@ -986,11 +987,11 @@ p {
   }
   .content-about .about-intro .about-picture {
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: -64px;
   }
   .content-about .about-services {
     margin-top: 60px;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .content-about .about-services .content-services {
     width: 100%;
