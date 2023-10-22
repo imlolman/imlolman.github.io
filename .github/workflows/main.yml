@@ -19,7 +19,7 @@ jobs:
 
     - name: Install Python Dependencies
       run: |
-        pip install requests jsonlib re os shutil datetime pillow
+        pip install requests image pillow
 
     - name: Run Python Script
       run: python3 _scrapper/scrap.py
