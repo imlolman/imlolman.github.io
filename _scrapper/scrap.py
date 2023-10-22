@@ -10,7 +10,7 @@ from PIL import Image
 def resize(filename, width):
     image = Image.open('temp/'+filename+'.png')
     w, h = image.size
-    image = image.resize((width, int((width/w)*h)), Image.ANTIALIAS)
+    image = image.resize((width, int((width/w)*h)), Image.Resampling.LANCZOS)
     quality_val = 90
     image.save('projects/images/'+filename+'.png', 'PNG', quality=quality_val)
 
