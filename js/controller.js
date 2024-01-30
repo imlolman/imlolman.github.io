@@ -29,7 +29,7 @@ var repoURLs = [
     /* 27 */ 'https://github.com/imlolman/WSS-Tester/',
     /* 28 */ 'https://github.com/imlolman/Minesweeper-AI/',
     /* 29 */ 'https://github.com/imlolman/TicTacToe-AI/',
-    /* 30 */ 'https://imlolman.github.io/Falling-Sand-Simulator/',
+    /* 30 */ 'https://github.com/imlolman/Falling-Sand-Simulator/',
 
     ]
     
