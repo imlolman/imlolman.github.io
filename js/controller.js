@@ -29,6 +29,8 @@ var repoURLs = [
     /* 27 */ 'https://github.com/imlolman/WSS-Tester/',
     /* 28 */ 'https://github.com/imlolman/Minesweeper-AI/',
     /* 29 */ 'https://github.com/imlolman/TicTacToe-AI/',
+    /* 30 */ 'https://imlolman.github.io/Falling-Sand-Simulator/',
+
     ]
     
     
@@ -45,7 +47,7 @@ var repoURLs = [
         g.setAttribute("id", "forkBox");
         g.innerHTML += '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />'
         repoURL = getRepoURL()
-        lb=[repoURLs[3],repoURLs[7],repoURLs[25],repoURLs[11],repoURLs[27],repoURLs[28],repoURLs[29], repoURLs[12]]
+        lb=[repoURLs[3],repoURLs[7],repoURLs[25],repoURLs[11],repoURLs[27],repoURLs[28],repoURLs[29], repoURLs[12], repoURLs[30]]
         if(lb.includes(repoURL)){
             g.innerHTML += '<a class="github-fork-ribbon left-bottom fixed" href="'+getRepoURL()+'" data-ribbon="Star me on GitHub" title="Star me on GitHub">Star me on GitHub</a>'
         }else{
