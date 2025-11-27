@@ -99,10 +99,11 @@ function loadProjects(x = 0) {
     projects = []
     data.forEach(repo => {
       if (repo.has_pages) {
+        const normalizedName = repo.name.toLowerCase();
         template = `
         <a href="https://imlolman.github.io/${repo.name}" target="_blank">
           <div class="header">
-            <img src="/projects/images/${repo.name}.png" alt="chrome extension">
+            <img src="/projects/images/${normalizedName}.png" alt="chrome extension">
             <p class="description">${repo.description}</p>
           </div>
           <p class="tag">Created ${moment(repo.created_at).fromNow()}</p>

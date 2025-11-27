@@ -8,16 +8,18 @@ from PIL import Image
 
 
 def resize(filename, width):
-    image = Image.open('temp/'+filename+'.png')
+    normalized = filename.lower()
+    image = Image.open('temp/'+normalized+'.png')
     w, h = image.size
     image = image.resize((width, int((width/w)*h)), Image.Resampling.LANCZOS)
     quality_val = 90
-    image.save('projects/images/'+filename+'.png', 'PNG', quality=quality_val)
+    image.save('projects/images/'+normalized+'.png', 'PNG', quality=quality_val)
 
 
 def download(url, filename):
+    normalized = filename.lower()
     r = requests.get(url)
-    open('temp/'+filename+'.png', 'wb').write(r.content)
+    open('temp/'+normalized+'.png', 'wb').write(r.content)
 
 
 def saveRepo():
@@ -59,7 +61,8 @@ def downloadNresize():
          encoding="utf-8").write(json.dumps(reposToPublish))
 
     for repo in reposToPublish:
-        if not os.path.isfile("projects/images/"+repo['name']+".png"):
+        normalized = repo['name'].lower()
+        if not os.path.isfile("projects/images/"+normalized+".png"):
             response = requests.get(repo['html_url'])
             response.encoding = 'utf-8'
 
