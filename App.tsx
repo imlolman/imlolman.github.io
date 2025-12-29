@@ -1071,7 +1071,7 @@ const App: React.FC = () => {
                     <h3 className="text-lg text-[#202124] mb-4 font-medium">People also search for</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {[
-                        "fun developer to work with",
+                        "serious but fun developer to work with",
                         "Coolest full-stack developer in India",
                         "Why everyone's favorite developer is the best to work with",
                         "Top-rated coding companion",
