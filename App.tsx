@@ -513,7 +513,7 @@ const App: React.FC = () => {
         {/* Logo Animation Container */}
         <motion.div
           layout={!skipHomepage}
-          className={`flex items-center ${isHome ? 'mb-8' : 'lg:mr-20 mb-4 lg:mb-0 mt-2 lg:mt-0 lg:self-start lg:mt-4 lg:ml-4'}`}
+          className={`flex items-center ${isHome ? 'mb-8' : 'lg:mr-16 mb-4 lg:mb-0 mt-2 lg:mt-0 lg:self-start lg:mt-4 lg:ml-4'}`}
         >
           <Logo
             size={isHome ? 'large' : 'small'}

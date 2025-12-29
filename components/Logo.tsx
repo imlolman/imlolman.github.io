@@ -25,7 +25,7 @@ export const Logo: React.FC<LogoProps> = ({ size = 'large', className = '', onCl
 
   return (
     <div
-      className={`select-none google-logo-text font-medium flex items-center justify-center ${textSize} ${letterSpacing} ${className} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`select-none google-logo-text font-medium flex items-center justify-center gap-0.5 ${textSize} ${letterSpacing} ${className} ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       {text.split('').map((letter, index) => (
