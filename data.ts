@@ -11,7 +11,7 @@ export const profileData: ProfileData = {
     { name: "Resume", url: "https://imlolman.github.io/Satyam%20Gupta%20Resume.pdf", badgeUrl: "https://img.shields.io/badge/Resume-EC1C24?style=for-the-badge&logo=readdotcv&logoColor=white" },
     { name: "LinkedIn", url: "https://linkedin.com/in/imlolman", badgeUrl: "https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" },
     { name: "Portfolio", url: "https://imlolman.github.io", badgeUrl: "https://img.shields.io/badge/Portfolio-255E63?style=for-the-badge&logo=googlechrome&logoColor=white" },
-    { name: "Medium", url: "https://medium.com/@imlolman", badgeUrl: "https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white" },
+    { name: "Medium", url: "https://medium.com/@satyam.gupta756", badgeUrl: "https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white" },
     { name: "Stack Overflow", url: "https://stackoverflow.com/users/6081232", badgeUrl: "https://img.shields.io/badge/Stack_Overflow-FE7A16?style=for-the-badge&logo=stackoverflow&logoColor=white" },
     { name: "GitHub", url: "https://github.com/imlolman", badgeUrl: "https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" }
   ],
@@ -653,6 +653,18 @@ export const profileData: ProfileData = {
       url: "/images/we-sponsered-wordcamp.jpg",
       source: "WordCamp Delhi",
       contextLink: "https://larapush.com"
+    },
+    {
+      title: "Team Outing",
+      url: "/images/me-on-team-outing.jpg",
+      source: "Brandzzy",
+      contextLink: "https://brandzzy.com"
+    },
+    {
+      title: "Visiting Bhutan",
+      url: "/images/me-visiting-bhutan.jpg",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
     }
   ]
 };

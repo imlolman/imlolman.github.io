@@ -1152,12 +1152,6 @@ const App: React.FC = () => {
                       </div>
                     </div>
                   ))}
-                  {/* Placeholder Images for grid effect */}
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={`p-${i}`} className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center text-gray-300">
-                      <ImageIcon size={32} />
-                    </div>
-                  ))}
                 </div>
               </div>
             )}
@@ -1325,16 +1319,147 @@ const App: React.FC = () => {
 
             {/* --- TAB: MAPS --- */}
             {activeTab === Tab.MAPS && (
-              <div className="w-full h-[60vh] bg-gray-100 rounded-lg flex items-center justify-center relative overflow-hidden">
-                <div className="text-gray-400 flex flex-col items-center">
-                  <MapPin size={48} className="mb-2 text-[#EA4335]" />
-                  <p>India</p>
+              <div className="w-full">
+                <div className="mb-4 text-sm text-[#70757a]">
+                  Career Journey Map • Hover over locations to learn more
                 </div>
-                {/* Simulated Map Background */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-                  backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
-                  backgroundSize: '20px 20px'
-                }}></div>
+                <div className="w-full h-[70vh] bg-gradient-to-br from-blue-50 to-green-50 rounded-lg flex items-center justify-center relative overflow-hidden border border-gray-200">
+                  {/* Map Background Grid */}
+                  <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
+                    backgroundImage: 'radial-gradient(circle, #000 1px, transparent 1px)',
+                    backgroundSize: '20px 20px'
+                  }}></div>
+
+                  {/* India Map Outline (Simplified SVG) */}
+                  <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
+                    <path d="M400,100 L450,150 L480,180 L500,220 L520,270 L530,320 L530,370 L520,420 L500,470 L470,520 L440,560 L410,590 L380,610 L350,620 L320,610 L290,590 L260,560 L230,520 L210,470 L200,420 L200,370 L210,320 L230,270 L260,220 L290,180 L330,140 L380,110 Z"
+                      fill="none"
+                      stroke="#4285F4"
+                      strokeWidth="2"
+                      opacity="0.3" />
+                  </svg>
+
+                  {/* Location Markers */}
+                  {[
+                    {
+                      city: 'Indore',
+                      description: 'College',
+                      details: 'Studied Computer Science Engineering',
+                      position: { top: '48%', left: '35%' },
+                      color: '#FBBC04'
+                    },
+                    {
+                      city: 'Bhubaneswar',
+                      description: 'Worked at Brandzzy',
+                      details: 'Founded Brandzzy SoftTech - Building LaraPush & scaling SaaS products',
+                      position: { top: '42%', left: '68%' },
+                      color: '#34A853'
+                    },
+                    {
+                      city: 'Delhi',
+                      description: 'Spoke at WordCamp 2024',
+                      details: 'Youngest speaker at WordCamp Delhi 2024 - Push Notification Strategies',
+                      position: { top: '22%', left: '42%' },
+                      color: '#EA4335'
+                    },
+                    {
+                      city: 'Bangalore',
+                      description: 'Worked with Wipro',
+                      details: 'Started career at Wipro - Software Development',
+                      position: { top: '62%', left: '45%' },
+                      color: '#4285F4'
+                    }
+                  ].map((location, idx) => (
+                    <div
+                      key={idx}
+                      className="absolute group cursor-pointer"
+                      style={{ top: location.position.top, left: location.position.left }}
+                    >
+                      {/* Pulsing Dot Animation */}
+                      <div className="relative">
+                        <div
+                          className="absolute inset-0 rounded-full animate-ping opacity-75"
+                          style={{
+                            backgroundColor: location.color,
+                            width: '24px',
+                            height: '24px',
+                            marginLeft: '-12px',
+                            marginTop: '-12px'
+                          }}
+                        />
+                        <div
+                          className="relative rounded-full shadow-lg border-2 border-white transition-transform group-hover:scale-150"
+                          style={{
+                            backgroundColor: location.color,
+                            width: '24px',
+                            height: '24px',
+                            marginLeft: '-12px',
+                            marginTop: '-12px'
+                          }}
+                        />
+                      </div>
+
+                      {/* Hover Card */}
+                      <div className="absolute left-8 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-4 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 border border-gray-200">
+                        <div className="flex items-start gap-3">
+                          <MapPin size={20} style={{ color: location.color }} className="flex-shrink-0 mt-1" />
+                          <div>
+                            <h3 className="font-bold text-[#202124] mb-1">{location.city}</h3>
+                            <p className="text-sm font-medium text-[#1a73e8] mb-2">{location.description}</p>
+                            <p className="text-xs text-[#5f6368] leading-relaxed">{location.details}</p>
+                          </div>
+                        </div>
+                        {/* Arrow pointing to marker */}
+                        <div
+                          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0"
+                          style={{
+                            borderTop: '8px solid transparent',
+                            borderBottom: '8px solid transparent',
+                            borderRight: '8px solid white'
+                          }}
+                        />
+                      </div>
+
+                      {/* City Label (always visible) */}
+                      <div className="absolute left-8 -top-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs font-medium text-[#202124] whitespace-nowrap shadow-sm">
+                        {location.city}
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Legend */}
+                  <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-4 border border-gray-200">
+                    <h3 className="text-sm font-bold text-[#202124] mb-2 flex items-center gap-2">
+                      <MapPin size={16} className="text-[#EA4335]" />
+                      Career Journey
+                    </h3>
+                    <div className="space-y-1 text-xs text-[#5f6368]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#4285F4' }}></div>
+                        <span>Wipro (Started)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#FBBC04' }}></div>
+                        <span>College</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#34A853' }}></div>
+                        <span>Brandzzy (Current)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#EA4335' }}></div>
+                        <span>Speaking</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Location Info */}
+                  <div className="absolute bottom-6 right-6 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-4 border border-gray-200 text-center">
+                    <MapPin size={24} className="mx-auto mb-2 text-[#EA4335]" />
+                    <p className="text-sm font-medium text-[#202124]">Based in India</p>
+                    <p className="text-xs text-[#5f6368] mt-1">Available for Remote Work</p>
+                  </div>
+                </div>
               </div>
             )}
 
