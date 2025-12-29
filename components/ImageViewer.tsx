@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Globe, Share2, MoreVertical, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageItem } from '../types';
 import { motion } from 'framer-motion';
@@ -15,6 +15,23 @@ interface ImageViewerProps {
 export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, currentIndex, onClose, onNext, onPrevious }) => {
   const hasNext = currentIndex < images.length - 1;
   const hasPrevious = currentIndex > 0;
+
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight' && hasNext) {
+        onNext();
+      } else if (event.key === 'ArrowLeft' && hasPrevious) {
+        onPrevious();
+      } else if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [hasNext, hasPrevious, onNext, onPrevious, onClose]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
