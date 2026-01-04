@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Mic, Camera, X, Settings, Terminal, PlayCircle, Newspaper, Image as ImageIcon, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePostHog } from 'posthog-js/react';
 import { Logo } from './components/Logo';
 import { SearchResult } from './components/SearchResult';
 import { KnowledgeGraph } from './components/KnowledgeGraph';
 import { ImageViewer } from './components/ImageViewer';
 import { profileData } from './data';
 import { ImageItem, ProjectItem } from './types';
+import { ANALYTICS_EVENTS } from './analytics';
 
 // Google Apps configuration with sprite positions (adding 103px to each position)
 const GOOGLE_APPS = [
@@ -35,6 +37,7 @@ enum Tab {
 }
 
 const App: React.FC = () => {
+  const posthog = usePostHog();
   const [appState, setAppState] = useState<AppState>(AppState.HOME);
   const [activeTab, setActiveTab] = useState<Tab>(Tab.ALL);
   const [searchValue, setSearchValue] = useState("");
@@ -56,20 +59,49 @@ const App: React.FC = () => {
 
   const selectedImage = selectedImageIndex !== null ? profileData.images[selectedImageIndex] : null;
 
+  // Scroll to top when active tab changes
+  useEffect(() => {
+    if (!isHome && appState === AppState.RESULTS) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeTab]);
+
   const handleImageClick = (image: ImageItem) => {
     const index = profileData.images.findIndex(img => img.url === image.url);
     setSelectedImageIndex(index >= 0 ? index : 0);
+
+    posthog?.capture(ANALYTICS_EVENTS.IMAGE_CLICKED, {
+      image_title: image.title,
+      image_source: image.source,
+      image_index: index,
+      context_link: image.contextLink
+    });
+
+    posthog?.capture(ANALYTICS_EVENTS.IMAGE_VIEWER_OPENED, {
+      image_title: image.title,
+      current_tab: Tab[activeTab]
+    });
   };
 
   const handleNextImage = () => {
     if (selectedImageIndex !== null && selectedImageIndex < profileData.images.length - 1) {
       setSelectedImageIndex(selectedImageIndex + 1);
+      posthog?.capture(ANALYTICS_EVENTS.IMAGE_NEXT_CLICKED, {
+        from_index: selectedImageIndex,
+        to_index: selectedImageIndex + 1,
+        image_title: profileData.images[selectedImageIndex + 1].title
+      });
     }
   };
 
   const handlePreviousImage = () => {
     if (selectedImageIndex !== null && selectedImageIndex > 0) {
       setSelectedImageIndex(selectedImageIndex - 1);
+      posthog?.capture(ANALYTICS_EVENTS.IMAGE_PREVIOUS_CLICKED, {
+        from_index: selectedImageIndex,
+        to_index: selectedImageIndex - 1,
+        image_title: profileData.images[selectedImageIndex - 1].title
+      });
     }
   };
 
@@ -82,6 +114,14 @@ const App: React.FC = () => {
     if (skipHomepage) {
       setSearchValue(TARGET_SEARCH);
       setAppState(AppState.RESULTS);
+      posthog?.capture(ANALYTICS_EVENTS.PAGE_VIEW_RESULTS, {
+        skip_homepage: true,
+        initial_load: true
+      });
+    } else {
+      posthog?.capture(ANALYTICS_EVENTS.PAGE_VIEW_HOME, {
+        initial_load: true
+      });
     }
   }, []);
 
@@ -135,8 +175,24 @@ const App: React.FC = () => {
       // Check if search is for imlolman
       if (searchValue.toLowerCase().includes('imlolman') || searchValue.toLowerCase().includes('satyam')) {
         setAppState(AppState.RESULTS);
+        posthog?.capture(ANALYTICS_EVENTS.SEARCH_PERFORMED, {
+          search_query: searchValue,
+          search_type: 'internal',
+          result: 'profile_shown'
+        });
+        posthog?.capture(ANALYTICS_EVENTS.PAGE_VIEW_RESULTS, {
+          via_search: true
+        });
       } else {
         // Redirect to Google search
+        posthog?.capture(ANALYTICS_EVENTS.SEARCH_PERFORMED, {
+          search_query: searchValue,
+          search_type: 'external',
+          result: 'redirected_to_google'
+        });
+        posthog?.capture(ANALYTICS_EVENTS.EXTERNAL_GOOGLE_SEARCH, {
+          search_query: searchValue
+        });
         window.open(`https://www.google.com/search?q=${encodeURIComponent(searchValue)}`, '_blank');
       }
     }
@@ -196,6 +252,11 @@ const App: React.FC = () => {
                   setShowSettingsMenu(!showSettingsMenu);
                   setShowAppsMenu(false);
                   setShowProfileMenu(false);
+                  if (!showSettingsMenu) {
+                    posthog?.capture(ANALYTICS_EVENTS.SETTINGS_MENU_OPENED, {
+                      location: 'home_page'
+                    });
+                  }
                 }}
               >
                 <Settings size={20} className="text-gray-600" />
@@ -238,6 +299,11 @@ const App: React.FC = () => {
                   setShowAppsMenu(!showAppsMenu);
                   setShowSettingsMenu(false);
                   setShowProfileMenu(false);
+                  if (!showAppsMenu) {
+                    posthog?.capture(ANALYTICS_EVENTS.APPS_MENU_OPENED, {
+                      location: 'home_page'
+                    });
+                  }
                 }}
               >
                 <svg className="gb_Ve" focusable="false" viewBox="0 0 24 24" width="24" height="24">
@@ -300,6 +366,13 @@ const App: React.FC = () => {
                             key={app.name}
                             className="flex flex-col items-center p-2 hover:bg-[#f1f3f4] rounded-lg cursor-pointer transition-colors relative group"
                             onClick={() => {
+                              posthog?.capture(ANALYTICS_EVENTS.GOOGLE_APP_CLICKED, {
+                                app_name: app.name,
+                                app_url: app.url,
+                                already_clicked: isAlreadyClicked,
+                                unique_apps_clicked: nextUniqueCount,
+                                location: isHome ? 'home_page' : 'results_page'
+                              });
                               if (!isAlreadyClicked) {
                                 setClickedApps(new Set([...clickedApps, app.name]));
                               }
@@ -383,6 +456,11 @@ const App: React.FC = () => {
                   setShowProfileMenu(!showProfileMenu);
                   setShowAppsMenu(false);
                   setShowSettingsMenu(false);
+                  if (!showProfileMenu) {
+                    posthog?.capture(ANALYTICS_EVENTS.PROFILE_MENU_OPENED, {
+                      location: isHome ? 'home_page' : 'results_page'
+                    });
+                  }
                 }}
               >
                 {/* 4-color border */}
@@ -499,6 +577,11 @@ const App: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block w-full py-2 px-4 text-sm text-[#1a73e8] hover:bg-[#f1f3f4] rounded-lg transition-colors text-center border border-[#dadce0]"
+                        onClick={() => {
+                          posthog?.capture(ANALYTICS_EVENTS.GOOGLE_ACCOUNT_CLICKED, {
+                            location: isHome ? 'home_page' : 'results_page'
+                          });
+                        }}
                       >
                         Manage <span className="font-bold">your</span> Google Account
                       </a>
@@ -518,7 +601,13 @@ const App: React.FC = () => {
           <Logo
             size={isHome ? 'large' : 'small'}
             text='Satyam'
-            onClick={() => { setAppState(AppState.HOME); setSearchValue(""); }}
+            onClick={() => {
+              posthog?.capture(ANALYTICS_EVENTS.LOGO_CLICKED, {
+                from_page: isHome ? 'home' : 'results'
+              });
+              setAppState(AppState.HOME);
+              setSearchValue("");
+            }}
             className="cursor-pointer"
           />
         </motion.div>
@@ -543,13 +632,22 @@ const App: React.FC = () => {
                   <X
                     size={24}
                     className="text-gray-500 cursor-pointer pr-2 border-r border-gray-300"
-                    onClick={() => setSearchValue("")}
+                    onClick={() => {
+                      posthog?.capture(ANALYTICS_EVENTS.SEARCH_CLEARED, {
+                        search_text_length: searchValue.length,
+                        location: isHome ? 'home' : 'results'
+                      });
+                      setSearchValue("");
+                    }}
                   />
                 )}
                 <Mic
                   className="text-[#4285F4] cursor-pointer"
                   size={20}
                   onClick={() => {
+                    posthog?.capture(ANALYTICS_EVENTS.SEARCH_VOICE_CLICKED, {
+                      location: isHome ? 'home' : 'results'
+                    });
                     window.open(`https://www.google.com/search?q=${encodeURIComponent(searchValue || 'voice search')}`, '_blank');
                   }}
                 />
@@ -557,6 +655,9 @@ const App: React.FC = () => {
                   className="text-[#4285F4] cursor-pointer"
                   size={20}
                   onClick={() => {
+                    posthog?.capture(ANALYTICS_EVENTS.SEARCH_CAMERA_CLICKED, {
+                      location: isHome ? 'home' : 'results'
+                    });
                     window.open('https://lens.google.com/', '_blank');
                   }}
                 />
@@ -570,10 +671,24 @@ const App: React.FC = () => {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="flex justify-center gap-3 mt-8"
               >
-                <button type="submit" className="bg-[#f8f9fa] border border-[#f8f9fa] hover:border-[#dadce0] hover:shadow-sm px-4 py-2 rounded text-sm text-[#3c4043]">
+                <button
+                  type="submit"
+                  className="bg-[#f8f9fa] border border-[#f8f9fa] hover:border-[#dadce0] hover:shadow-sm px-4 py-2 rounded text-sm text-[#3c4043]"
+                  onClick={() => {
+                    posthog?.capture(ANALYTICS_EVENTS.GOOGLE_SEARCH_BUTTON_CLICKED, {
+                      search_query: searchValue
+                    });
+                  }}
+                >
                   Google Search
                 </button>
-                <button type="button" className="bg-[#f8f9fa] border border-[#f8f9fa] hover:border-[#dadce0] hover:shadow-sm px-4 py-2 rounded text-sm text-[#3c4043]">
+                <button
+                  type="button"
+                  className="bg-[#f8f9fa] border border-[#f8f9fa] hover:border-[#dadce0] hover:shadow-sm px-4 py-2 rounded text-sm text-[#3c4043]"
+                  onClick={() => {
+                    posthog?.capture(ANALYTICS_EVENTS.FEELING_LUCKY_BUTTON_CLICKED);
+                  }}
+                >
                   I'm Feeling Lucky
                 </button>
               </motion.div>
@@ -589,16 +704,22 @@ const App: React.FC = () => {
               className="flex gap-6 mt-4 lg:mt-6 ml-4 text-sm text-[#5f6368] overflow-x-auto no-scrollbar"
             >
               {[
-                { type: Tab.AI_MODE, label: 'AI Mode', icon: Sparkles },
-                { type: Tab.ALL, label: 'All', icon: Search },
-                { type: Tab.IMAGES, label: 'Images', icon: ImageIcon },
-                { type: Tab.VIDEOS, label: 'Videos', icon: PlayCircle },
-                { type: Tab.NEWS, label: 'News', icon: Newspaper },
-                { type: Tab.PROJECTS, label: 'Projects', icon: Terminal },
+                { type: Tab.AI_MODE, label: 'AI Mode', icon: Sparkles, event: ANALYTICS_EVENTS.TAB_CLICKED_AI_MODE },
+                { type: Tab.ALL, label: 'All', icon: Search, event: ANALYTICS_EVENTS.TAB_CLICKED_ALL },
+                { type: Tab.IMAGES, label: 'Images', icon: ImageIcon, event: ANALYTICS_EVENTS.TAB_CLICKED_IMAGES },
+                { type: Tab.VIDEOS, label: 'Videos', icon: PlayCircle, event: ANALYTICS_EVENTS.TAB_CLICKED_VIDEOS },
+                { type: Tab.NEWS, label: 'News', icon: Newspaper, event: ANALYTICS_EVENTS.TAB_CLICKED_NEWS },
+                { type: Tab.PROJECTS, label: 'Projects', icon: Terminal, event: ANALYTICS_EVENTS.TAB_CLICKED_PROJECTS },
               ].map(tab => (
                 <div
                   key={tab.type}
-                  onClick={() => setActiveTab(tab.type)}
+                  onClick={() => {
+                    posthog?.capture(tab.event, {
+                      previous_tab: Tab[activeTab],
+                      new_tab: Tab[tab.type]
+                    });
+                    setActiveTab(tab.type);
+                  }}
                   className={`pb-3 cursor-pointer flex-shrink-0 flex items-center gap-1 ${activeTab === tab.type ? 'border-b-[3px] border-[#1a73e8] text-[#1a73e8] font-medium' : 'hover:text-[#202124]'}`}
                 >
                   <tab.icon size={14} /> {tab.label}
@@ -725,6 +846,13 @@ const App: React.FC = () => {
                             key={app.name}
                             className="flex flex-col items-center p-2 hover:bg-[#f1f3f4] rounded-lg cursor-pointer transition-colors relative group"
                             onClick={() => {
+                              posthog?.capture(ANALYTICS_EVENTS.GOOGLE_APP_CLICKED, {
+                                app_name: app.name,
+                                app_url: app.url,
+                                already_clicked: isAlreadyClicked,
+                                unique_apps_clicked: nextUniqueCount,
+                                location: isHome ? 'home_page' : 'results_page'
+                              });
                               if (!isAlreadyClicked) {
                                 setClickedApps(new Set([...clickedApps, app.name]));
                               }
@@ -808,6 +936,11 @@ const App: React.FC = () => {
                   setShowProfileMenu(!showProfileMenu);
                   setShowAppsMenu(false);
                   setShowSettingsMenu(false);
+                  if (!showProfileMenu) {
+                    posthog?.capture(ANALYTICS_EVENTS.PROFILE_MENU_OPENED, {
+                      location: isHome ? 'home_page' : 'results_page'
+                    });
+                  }
                 }}
               >
                 {/* 4-color border */}
@@ -924,6 +1057,11 @@ const App: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block w-full py-2 px-4 text-sm text-[#1a73e8] hover:bg-[#f1f3f4] rounded-lg transition-colors text-center border border-[#dadce0]"
+                        onClick={() => {
+                          posthog?.capture(ANALYTICS_EVENTS.GOOGLE_ACCOUNT_CLICKED, {
+                            location: isHome ? 'home_page' : 'results_page'
+                          });
+                        }}
                       >
                         Manage <span className="font-bold">your</span> Google Account
                       </a>
@@ -955,7 +1093,10 @@ const App: React.FC = () => {
                     AI Mode? Really? Even Google's confused. Go back to All mode please.
                   </p>
                   <button
-                    onClick={() => setActiveTab(Tab.ALL)}
+                    onClick={() => {
+                      posthog?.capture(ANALYTICS_EVENTS.AI_MODE_GO_BACK_CLICKED);
+                      setActiveTab(Tab.ALL);
+                    }}
                     className="bg-[#1a73e8] text-white px-6 py-2 rounded hover:bg-[#1557b0] transition-colors"
                   >
                     Go back to All
@@ -978,7 +1119,46 @@ const App: React.FC = () => {
                     description={
                       <div className="flex flex-wrap gap-2 mt-2">
                         {profileData.socials.filter(s => s.name !== 'Medium').map((s, i) => (
-                          <a key={i} href={s.url} target="_blank" rel="noreferrer">
+                          <a
+                            key={i}
+                            href={s.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => {
+                              posthog?.capture(ANALYTICS_EVENTS.BADGE_CLICKED, {
+                                badge_name: s.name,
+                                badge_url: s.url,
+                                location: 'all_tab_sponsored_section'
+                              });
+
+                              // Track specific social clicks
+                              if (s.name === 'Resume') {
+                                posthog?.capture(ANALYTICS_EVENTS.RESUME_DOWNLOADED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              } else if (s.name === 'LinkedIn') {
+                                posthog?.capture(ANALYTICS_EVENTS.LINKEDIN_CLICKED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              } else if (s.name === 'GitHub') {
+                                posthog?.capture(ANALYTICS_EVENTS.GITHUB_CLICKED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              } else if (s.name === 'Portfolio') {
+                                posthog?.capture(ANALYTICS_EVENTS.PORTFOLIO_CLICKED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              } else if (s.name === 'Email') {
+                                posthog?.capture(ANALYTICS_EVENTS.EMAIL_CLICKED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              } else if (s.name === 'Stack Overflow') {
+                                posthog?.capture(ANALYTICS_EVENTS.STACKOVERFLOW_CLICKED, {
+                                  location: 'all_tab_sponsored_section'
+                                });
+                              }
+                            }}
+                          >
                             <img src={s.badgeUrl} alt={s.name} className="h-6 rounded-sm opacity-90 hover:opacity-100 transition-opacity" />
                           </a>
                         ))}
@@ -1020,6 +1200,13 @@ const App: React.FC = () => {
                         title={project.title}
                         url={project.url || `https://github.com/${profileData.handle}`}
                         breadcrumbs={['Projects', project.title]}
+                        onLinkClick={() => {
+                          posthog?.capture(ANALYTICS_EVENTS.FEATURED_PROJECT_CLICKED, {
+                            project_title: project.title,
+                            project_url: project.url,
+                            tech_stack: project.techStack.join(', ')
+                          });
+                        }}
                         description={
                           <div>
                             <p>{project.description}</p>
@@ -1046,7 +1233,21 @@ const App: React.FC = () => {
                         <div className="grid lg:grid-cols-2 gap-4">
                           {category.items.map((project, i) => (
                             <div key={i} className="border p-3 rounded hover:shadow-sm">
-                              <a href={project.url} target="_blank" rel="noreferrer" className="text-[#1a0dab] hover:underline font-medium block">{project.name}</a>
+                              <a
+                                href={project.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-[#1a0dab] hover:underline font-medium block"
+                                onClick={() => {
+                                  posthog?.capture(ANALYTICS_EVENTS.OPEN_SOURCE_PROJECT_CLICKED, {
+                                    project_name: project.name,
+                                    project_url: project.url,
+                                    category: category.name
+                                  });
+                                }}
+                              >
+                                {project.name}
+                              </a>
                               <p className="text-xs text-gray-600 mt-1">{project.description}</p>
                             </div>
                           ))}
@@ -1063,7 +1264,20 @@ const App: React.FC = () => {
                     <p className="text-sm text-[#5f6368] mb-4">{profileData.openSource.maccy.subtitle}</p>
 
                     <div className="border p-4 rounded hover:shadow-sm max-w-xl">
-                      <a href={profileData.openSource.maccy.project.url} target="_blank" rel="noreferrer" className="text-[#1a0dab] hover:underline font-medium text-lg block">{profileData.openSource.maccy.project.name}</a>
+                      <a
+                        href={profileData.openSource.maccy.project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#1a0dab] hover:underline font-medium text-lg block"
+                        onClick={() => {
+                          posthog?.capture(ANALYTICS_EVENTS.MACCY_PROJECT_CLICKED, {
+                            project_name: profileData.openSource.maccy.project.name,
+                            project_url: profileData.openSource.maccy.project.url
+                          });
+                        }}
+                      >
+                        {profileData.openSource.maccy.project.name}
+                      </a>
                       <p className="text-sm text-gray-600 mt-2">{profileData.openSource.maccy.project.description}</p>
                     </div>
                   </div>
@@ -1169,6 +1383,14 @@ const App: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="border border-gray-200 rounded-xl hover:shadow-xl transition-all duration-300 bg-white overflow-hidden flex flex-col h-full group"
+                      onClick={() => {
+                        posthog?.capture(ANALYTICS_EVENTS.VIDEO_CLICKED, {
+                          video_title: video.title,
+                          video_url: video.url,
+                          video_views: video.views,
+                          video_date: video.date
+                        });
+                      }}
                     >
                       {/* Video Thumbnail */}
                       <div className="relative overflow-hidden bg-black aspect-video">
@@ -1215,7 +1437,17 @@ const App: React.FC = () => {
             {activeTab === Tab.NEWS && (
               <div className="max-w-2xl">
                 {profileData.articles.map((article, i) => (
-                  <div key={i} className="mb-6 border rounded-lg p-4 hover:shadow-sm transition-shadow bg-white">
+                  <div
+                    key={i}
+                    className="mb-6 border rounded-lg p-4 hover:shadow-sm transition-shadow bg-white"
+                    onClick={() => {
+                      posthog?.capture(ANALYTICS_EVENTS.NEWS_ARTICLE_CLICKED, {
+                        article_title: article.title,
+                        article_source: article.source,
+                        article_date: article.date
+                      });
+                    }}
+                  >
                     <div className="flex gap-2 items-center mb-2">
                       <Newspaper size={16} className="text-gray-500" />
                       <span className="text-xs text-[#202124] font-medium">{article.source}</span>
@@ -1265,6 +1497,16 @@ const App: React.FC = () => {
                             target="_blank"
                             rel="noreferrer"
                             className="relative group overflow-hidden bg-white"
+                            onClick={() => {
+                              posthog?.capture(ANALYTICS_EVENTS.PROJECT_CLICKED, {
+                                project_name: project.name,
+                                project_url: `https://imlolman.github.io/${project.name}`,
+                                project_description: project.description,
+                                created_at: project.createdAt,
+                                time_ago: timeAgo,
+                                click_target: 'image'
+                              });
+                            }}
                           >
                             <img
                               src={project.imagePath}
@@ -1285,6 +1527,16 @@ const App: React.FC = () => {
                                 target="_blank"
                                 rel="noreferrer"
                                 className="flex-1"
+                                onClick={() => {
+                                  posthog?.capture(ANALYTICS_EVENTS.PROJECT_CLICKED, {
+                                    project_name: project.name,
+                                    project_url: `https://imlolman.github.io/${project.name}`,
+                                    project_description: project.description,
+                                    created_at: project.createdAt,
+                                    time_ago: timeAgo,
+                                    click_target: 'title'
+                                  });
+                                }}
                               >
                                 <h3 className="text-lg font-bold text-[#1a0dab] hover:underline mb-1 line-clamp-2">
                                   {project.name.replace(/-/g, ' ')}
@@ -1296,6 +1548,12 @@ const App: React.FC = () => {
                                 rel="noreferrer"
                                 className="flex-shrink-0 p-2 rounded-lg hover:bg-gray-100 transition-colors"
                                 title="View on GitHub"
+                                onClick={() => {
+                                  posthog?.capture(ANALYTICS_EVENTS.PROJECT_GITHUB_CLICKED, {
+                                    project_name: project.name,
+                                    github_url: project.htmlUrl
+                                  });
+                                }}
                               >
                                 <svg className="w-5 h-5 text-gray-700 hover:text-gray-900" fill="currentColor" viewBox="0 0 24 24">
                                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -1341,7 +1599,17 @@ const App: React.FC = () => {
                 'Terms': "Terms and Conditions: Be awesome, be respectful, and hire me if you like what you see 😎",
                 'Settings': "Settings? What settings? This is a portfolio, not a spaceship control panel 🚀"
               };
+
+              // Track footer link click
+              posthog?.capture(ANALYTICS_EVENTS.FOOTER_LINK_CLICKED, {
+                link_text: text,
+                location: 'home_page'
+              });
+
               if (text === 'Business') {
+                posthog?.capture(ANALYTICS_EVENTS.FOOTER_BUSINESS_CLICKED, {
+                  location: 'home_page'
+                });
                 window.location.href = 'mailto:satyamforwork@gmail.com';
               } else if (text && funnyMessages[text]) {
                 alert(funnyMessages[text]);
@@ -1384,7 +1652,17 @@ const App: React.FC = () => {
                   'Terms': "Terms and Conditions: Be awesome, be respectful, and hire me if you like what you see 😎",
                   'Settings': "Settings? What settings? This is a portfolio, not a spaceship control panel 🚀"
                 };
+
+                // Track footer link click
+                posthog?.capture(ANALYTICS_EVENTS.FOOTER_LINK_CLICKED, {
+                  link_text: text,
+                  location: 'results_page'
+                });
+
                 if (text === 'Business') {
+                  posthog?.capture(ANALYTICS_EVENTS.FOOTER_BUSINESS_CLICKED, {
+                    location: 'results_page'
+                  });
                   window.location.href = 'mailto:satyamforwork@gmail.com';
                 } else if (text && funnyMessages[text]) {
                   alert(funnyMessages[text]);

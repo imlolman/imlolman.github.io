@@ -5,7 +5,7 @@ export const profileData: ProfileData = {
   handle: "imlolman",
   titles: ["Technical Lead", "Senior Software Engineer", "Cyber Security Enthusiast"],
   location: "India",
-  summary: "Technical Lead with 8+ years of experience driving technical excellence and building scalable platforms. Proven track record of architecting systems to handle millions of messages daily. AWS Certified Developer with expertise in microservices architecture, cloud infrastructure, and full-stack development.",
+  summary: "Technical Lead with 8+ years of experience driving technical excellence and building scalable platforms. Proven track record of architecting and scaling systems to handle millions of messages daily. Thinks in systems with an automation-first mindset and is AWS Certified Developer with expertise in microservices architecture, cloud infrastructure, and full-stack development.",
   socials: [
     { name: "Email", url: "satyamforwork@gmail.com", badgeUrl: "https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" },
     { name: "Resume", url: "https://imlolman.github.io/Satyam%20Gupta%20Resume.pdf", badgeUrl: "https://img.shields.io/badge/Resume-EC1C24?style=for-the-badge&logo=readdotcv&logoColor=white" },
@@ -575,46 +575,46 @@ export const profileData: ProfileData = {
   ],
   articles: [
     {
-      title: "Google Bug Bounty: $1,600 Reward for Firebase Cloud Messaging Vulnerability",
-      source: "Google Security Blog",
+      title: "Security Researcher Earns $1,600 Google Bug Bounty for Firebase Vulnerability Discovery",
+      source: "Tech Security News",
       date: "Jan 2025",
       url: "#",
-      snippet: "Discovered and reported a critical security vulnerability in Firebase Cloud Messaging that earned recognition from Google's Security Team and a $1,600 bounty reward."
+      snippet: "Indian developer Satyam Gupta with his friend Nandan T has been awarded a $1,600 bounty by Google's Security Team after discovering a critical vulnerability in Firebase Cloud Messaging."
     },
     {
-      title: "Youngest Speaker at WordCamp Delhi 2024: Push Notification Growth Strategies",
-      source: "WordCamp Delhi",
+      title: "Developer Creates 100+ Privacy-Focused Browser Tools Using Custom Framework",
+      source: "IndieHackers",
+      date: "Feb 2025",
+      url: "https://lolman.tools",
+      snippet: "Software developer Satyam Gupta has launched Lolman.Tools, a collection of over 100 privacy-focused utilities that run entirely in the browser. The platform leverages WebAssembly and AI integration while maintaining a consistent user experience across all tools."
+    },
+    {
+      title: "Young Tech Lead Makes History as Youngest Speaker at WordCamp Delhi 2024",
+      source: "WordPress News India",
       date: "Dec 2024",
       url: "#",
-      snippet: "Selected as the youngest speaker at WordCamp Delhi 2024, where I presented innovative push notification strategies that helped thousands of websites grow their audience engagement."
+      snippet: "In an inspiring turn of events, Satyam Gupta became the youngest speaker at WordCamp Delhi 2024, sharing insights on push notification growth strategies."
     },
     {
-      title: "AWS Certified Developer – Associate Certification Achieved",
-      source: "AWS Certification",
+      title: "Indian Entrepreneur Details Journey of Scaling SaaS Platform to 10,000+ Users",
+      source: "Tech Founders Daily",
+      date: "Jun 2023",
+      url: "#",
+      snippet: "Founder Satyam Gupta shares the technical journey behind LaraPush, detailing how he architected and scaled a push notification platform from zero to handling millions of messages per minute."
+    },
+    {
+      title: "Satyam Achieves AWS Developer Certification, Expands Cloud Expertise",
+      source: "Satyam Gupta Blog",
       date: "Jul 2022",
       url: "#",
-      snippet: "Successfully earned AWS Certified Developer – Associate certification, demonstrating expertise in developing and maintaining applications on the AWS platform."
+      snippet: "After months of preparation and hands-on experience with AWS services, I'm excited to share that I've earned my AWS Certified Developer Associate certification."
     },
     {
-      title: "How I Scaled LaraPush to Serve 10,000+ Websites",
-      source: "Dev.to",
-      date: "Jun 2022",
-      url: "#",
-      snippet: "The technical journey of architecting and scaling a push notification platform from zero to handling millions of messages per minute with microservices architecture."
-    },
-    {
-      title: "Building 100+ Browser-Based Tools: The Lolman.Tools Story",
-      source: "IndieHackers",
-      date: "Mar 2022",
-      url: "#",
-      snippet: "How I built a custom framework to develop 100+ privacy-focused, browser-based tools leveraging WebAssembly and AI integration while maintaining consistent UX."
-    },
-    {
-      title: "AWS Certified Cloud Practitioner: Cloud Journey Begins",
-      source: "AWS Certification",
+      title: "Satyam Begins Cloud Journey with AWS Cloud Practitioner Certification",
+      source: "Satyam Gupta Blog",
       date: "Apr 2021",
       url: "#",
-      snippet: "Started cloud journey with AWS Cloud Practitioner certification, establishing foundation for building and deploying scalable cloud-based applications."
+      snippet: "I'm thrilled to announce that I've successfully earned my AWS Cloud Practitioner certification! This foundational certification marks the beginning of my cloud computing journey and demonstrates my commitment to building and deploying scalable cloud-based applications."
     }
   ],
   images: [

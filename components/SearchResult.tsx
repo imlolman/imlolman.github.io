@@ -8,6 +8,7 @@ interface SearchResultProps {
   description: React.ReactNode;
   breadcrumbs?: string[];
   isAd?: boolean;
+  onLinkClick?: () => void;
 }
 
 export const SearchResult: React.FC<SearchResultProps> = ({ 
@@ -16,7 +17,8 @@ export const SearchResult: React.FC<SearchResultProps> = ({
   displayUrl, 
   description, 
   breadcrumbs,
-  isAd = false 
+  isAd = false,
+  onLinkClick
 }) => {
   return (
     <div className="mb-8 max-w-2xl font-sans">
@@ -28,7 +30,7 @@ export const SearchResult: React.FC<SearchResultProps> = ({
         )}
         
         {url ? (
-          <a href={url} target="_blank" rel="noopener noreferrer" className="block">
+          <a href={url} target="_blank" rel="noopener noreferrer" className="block" onClick={onLinkClick}>
              <div className="flex items-center text-sm text-[#202124] mb-1">
               {isAd ? (
                  <div className="flex items-center gap-2">

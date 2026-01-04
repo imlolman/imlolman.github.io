@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { X, Globe, Share2, MoreVertical, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ImageItem } from '../types';
 import { motion } from 'framer-motion';
+import { usePostHog } from 'posthog-js/react';
+import { ANALYTICS_EVENTS } from '../analytics';
 
 interface ImageViewerProps {
   image: ImageItem;
@@ -13,6 +15,7 @@ interface ImageViewerProps {
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, currentIndex, onClose, onNext, onPrevious }) => {
+  const posthog = usePostHog();
   const hasNext = currentIndex < images.length - 1;
   const hasPrevious = currentIndex > 0;
 
@@ -20,25 +23,45 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, current
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowRight' && hasNext) {
+        posthog?.capture(ANALYTICS_EVENTS.IMAGE_KEYBOARD_NAVIGATION, {
+          direction: 'next',
+          key: 'ArrowRight',
+          image_title: images[currentIndex + 1]?.title
+        });
         onNext();
       } else if (event.key === 'ArrowLeft' && hasPrevious) {
+        posthog?.capture(ANALYTICS_EVENTS.IMAGE_KEYBOARD_NAVIGATION, {
+          direction: 'previous',
+          key: 'ArrowLeft',
+          image_title: images[currentIndex - 1]?.title
+        });
         onPrevious();
       } else if (event.key === 'Escape') {
+        posthog?.capture(ANALYTICS_EVENTS.IMAGE_VIEWER_CLOSED, {
+          method: 'keyboard_escape',
+          image_title: image.title
+        });
         onClose();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [hasNext, hasPrevious, onNext, onPrevious, onClose]);
+  }, [hasNext, hasPrevious, onNext, onPrevious, onClose, posthog, image, images, currentIndex]);
 
   return (
-    <motion.div
+      <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 bg-black/90 z-[60] flex flex-col lg:flex-row"
-      onClick={onClose}
+      onClick={() => {
+        posthog?.capture(ANALYTICS_EVENTS.IMAGE_VIEWER_CLOSED, {
+          method: 'background_click',
+          image_title: image.title
+        });
+        onClose();
+      }}
     >
       {/* Main Image Area */}
       <div className="flex-grow flex items-center justify-center p-4 relative h-full">
@@ -78,7 +101,13 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, current
         )}
 
         <button
-          onClick={onClose}
+          onClick={() => {
+            posthog?.capture(ANALYTICS_EVENTS.IMAGE_VIEWER_CLOSED, {
+              method: 'close_button_mobile',
+              image_title: image.title
+            });
+            onClose();
+          }}
           className="absolute top-4 right-4 text-white/70 hover:text-white lg:hidden z-20"
         >
           <X size={24} />
@@ -93,9 +122,30 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, current
         <div className="flex justify-between items-start mb-6">
           <h2 className="text-xl leading-snug font-medium">{image.title}</h2>
           <div className="flex gap-2">
-            <button className="p-2 hover:bg-[#3c4043] rounded-full"><Share2 size={20} /></button>
+            <button 
+              className="p-2 hover:bg-[#3c4043] rounded-full"
+              onClick={() => {
+                posthog?.capture(ANALYTICS_EVENTS.IMAGE_SHARE_CLICKED, {
+                  image_title: image.title,
+                  image_url: image.url
+                });
+              }}
+            >
+              <Share2 size={20} />
+            </button>
             <button className="p-2 hover:bg-[#3c4043] rounded-full"><MoreVertical size={20} /></button>
-            <button onClick={onClose} className="hidden lg:block p-2 hover:bg-[#3c4043] rounded-full"><X size={24} /></button>
+            <button 
+              onClick={() => {
+                posthog?.capture(ANALYTICS_EVENTS.IMAGE_VIEWER_CLOSED, {
+                  method: 'close_button_desktop',
+                  image_title: image.title
+                });
+                onClose();
+              }} 
+              className="hidden lg:block p-2 hover:bg-[#3c4043] rounded-full"
+            >
+              <X size={24} />
+            </button>
           </div>
         </div>
 
@@ -114,6 +164,12 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ image, images, current
           target="_blank"
           rel="noreferrer"
           className="bg-[#8ab4f8] text-[#202124] text-center py-2 rounded-full font-medium hover:bg-[#aecbfa] transition-colors mb-4 block"
+          onClick={() => {
+            posthog?.capture(ANALYTICS_EVENTS.IMAGE_VISIT_CLICKED, {
+              image_title: image.title,
+              context_link: image.contextLink
+            });
+          }}
         >
           Visit
         </a>
