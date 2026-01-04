@@ -23,11 +23,11 @@ export const profileData: ProfileData = {
       { label: "Websites", value: "10K+", icon: "https://img.shields.io/badge/Websites-10K+-success?style=flat-square&logo=google-chrome" },
       { label: "MRR", value: "$10K+", icon: "https://img.shields.io/badge/MRR-$10K+-success?style=flat-square&logo=dollar" },
       { label: "Team", value: "15+", icon: "https://img.shields.io/badge/Team-15+-blue?style=flat-square&logo=users" },
-      { label: "Notifications", value: "1.5 Million/min", icon: "https://img.shields.io/badge/Notifications-1.5_Million/min-orange?style=flat-square&logo=bell" }
+      { label: "Notifications", value: "Millions Daily", icon: "https://img.shields.io/badge/Notifications-Millions_Daily-orange?style=flat-square&logo=bell" }
     ],
     description: [
       "Leading technical strategy and architecture for multiple SaaS products: LaraPush, ZeroCLI, and AdsGrab.",
-      "Architected and scaled push notification platform to handle millions of messages per minute with microservices infrastructure.",
+      "Architected and scaled push notification platform to handle millions of messages daily with microservices infrastructure.",
       "Achieved $10k+ MRR through scalable SaaS growth strategies.",
       "Built comprehensive migration system importing subscribers from OneSignal, Feedify, iZooto, Truepush, and Notix.",
       "Implemented double-layer Free CDN (GitHub Pages + Cloudflare) ensuring 99.9% uptime."
@@ -40,7 +40,7 @@ export const profileData: ProfileData = {
   achievements: [
     "Google Bug Bounty - $1,600 (2025) - Discovered vulnerability in Firebase Cloud Messaging",
     "WordCamp Delhi 2024 Speaker - Selected as youngest speaker, presented on push notification growth strategies",
-    "Scaled Platform - LaraPush serving 10,000+ websites with millions of notifications per minute",
+    "Scaled Platform - LaraPush serving 10,000+ websites with millions of notifications daily",
     "Built 100+ Tools - Created Lolman.Tools with privacy-focused, browser-based utilities",
     "Open Source Contributor - Active contributions to Maccy and 15+ open source projects"
   ],
@@ -48,7 +48,7 @@ export const profileData: ProfileData = {
     {
       title: "LaraPush",
       url: "https://larapush.com",
-      description: "A self-hosted push notification platform powering over 10,000 websites. Architected and built solo for the first two years, handling backend, frontend, analytics, payment gateway integration, and automated migration systems. The platform delivers millions of notifications per minute.",
+      description: "A self-hosted push notification platform powering over 10,000 websites. Architected and built solo for the first two years, handling backend, frontend, analytics, payment gateway integration, and automated migration systems. The platform delivers millions of notifications daily.",
       techStack: ["Laravel", "PHP", "TypeScript", "JavaScript", "Docker", "MySQL", "Redis", "BullMQ", "Bash", "Linux"]
     },
     {
@@ -600,7 +600,7 @@ export const profileData: ProfileData = {
       source: "Tech Founders Daily",
       date: "Jun 2023",
       url: "#",
-      snippet: "Founder Satyam Gupta shares the technical journey behind LaraPush, detailing how he architected and scaled a push notification platform from zero to handling millions of messages per minute."
+      snippet: "Founder Satyam Gupta shares the technical journey behind LaraPush, detailing how he architected and scaled a push notification platform from zero to handling millions of messages daily."
     },
     {
       title: "Satyam Achieves AWS Developer Certification, Expands Cloud Expertise",
