@@ -65,7 +65,7 @@ export const profileData: ProfileData = {
     },
     {
       title: "Learn Bharat App",
-      url: "",
+      url: "https://github.com/imlolman/",
       description: "Complete MLM platform with React Native app, Laravel backend, and admin panel. Features payment gateway integration, social media APIs, and performance-based reward systems.",
       techStack: ["Laravel", "React Native", "PHP", "JavaScript"]
     }
@@ -643,6 +643,12 @@ export const profileData: ProfileData = {
       contextLink: "https://imlolman.github.io"
     },
     {
+      title: "With Doggo in Mountains",
+      url: "/images/me-with-doggo-in-mountains.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
       title: "With LaraPush Team",
       url: "/images/me-with-larapush-team.jpeg",
       source: "Brandzzy",
@@ -665,6 +671,42 @@ export const profileData: ProfileData = {
       url: "/images/me-visiting-bhutan.jpg",
       source: "Personal",
       contextLink: "https://imlolman.github.io"
-    }
+    },
+    {
+      title: "On a Boat",
+      url: "/images/me-on-boat.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
+      title: "At a Monastery",
+      url: "/images/me-on-monastery.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
+      title: "With a Dino",
+      url: "/images/me-with-dino.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
+      title: "At Home",
+      url: "/images/me-at-home.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
+      title: "On the Mountains",
+      url: "/images/me-on-mountains.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
+    {
+      title: "With Rocks",
+      url: "/images/me-with-rocks.JPG",
+      source: "Personal",
+      contextLink: "https://imlolman.github.io"
+    },
   ]
 };
